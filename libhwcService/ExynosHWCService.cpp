@@ -286,7 +286,29 @@ int ExynosHWCService::getPresentationMode()
     return INVALID_OPERATION;
 #endif
 }
-
+#if declared (exynos7870)
+    void ExynosHWCService::getHdmiResolution(uint32_t *width, uint32_t *height)
+    {
+        switch (mHWCCtx->mHdmiCurrentPreset) {
+        case V4L2_DV_480P60:
+            *width = 640;
+            *height = 480;
+            break;
+        case V4L2_DV_576P50:
+            *width = 720;
+            *height = 576;
+            break;
+        case V4L2_DV_720P50_TB:
+            *width = 1280;
+            *height = 720;
+            break;
+        case V4L2_DV_1080P30_TB:
+            *width = 1920;
+            *height = 1080;
+            break;
+         }
+    }
+#else
 void ExynosHWCService::getHdmiResolution(uint32_t *width, uint32_t *height)
 {
     switch (mHWCCtx->mHdmiCurrentPreset) {
@@ -348,7 +370,7 @@ void ExynosHWCService::getHdmiResolution(uint32_t *width, uint32_t *height)
         break;
     }
 }
-
+#endif
 uint32_t ExynosHWCService::getHdmiCableStatus()
 {
     return !!mHWCCtx->hdmi_hpd;
